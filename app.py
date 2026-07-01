@@ -20,8 +20,8 @@ if uploaded_file is not None:
     st.header("Informasi Dataset")
     c1,c2=st.columns(2)
     c1.metric("Jumlah baris",len(df))
-    c2.metric("Jumlah provinsi",df['Provinsi'].nunique())
-    st.write(sorted(df["Provinsi"].unique()))
+    c2.metric("Jumlah provinsi",df['province'].nunique())
+    st.write(sorted(df["province"].unique()))
 
     st.header("Statistika Deskriptif")
     hasil=pd.DataFrame({
