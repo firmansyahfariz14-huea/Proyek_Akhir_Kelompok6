@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-import streamlit as str
+import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 
-# Konfigurasi halaman Streamlit
+# ============================================
+# CONFIGURATION: Harus diletakkan di paling atas!
+# ============================================
 st.set_page_config(
     page_title="Dashboard Analisis Tanaman Padi Sumatera",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+# Pengaturan visual grafik
 sns.set_style('whitegrid')
 
 # ============================================
@@ -28,7 +31,7 @@ def kekuatan_korelasi(r):
 
 @st.cache_data
 def load_data(file_path):
-    # Menggunakan cache agar data tidak di-load ulang setiap interaksi user
+    """Membaca data CSV dengan cache agar aplikasi tetap cepat saat interaksi."""
     df = pd.read_csv(file_path, encoding='utf-8-sig')
     return df
 
@@ -38,7 +41,7 @@ def load_data(file_path):
 st.sidebar.title("Navigasi & Pengaturan")
 uploaded_file = st.sidebar.file_uploader("Upload File CSV Data Padi", type=["csv"])
 
-# Gunakan data default atau minta upload jika belum ada
+# Validasi ketersediaan data sebelum menjalankan visualisasi
 if uploaded_file is not None:
     df = load_data(uploaded_file)
 else:
@@ -123,6 +126,7 @@ elif menu == "Visualisasi Distribusi & Outlier":
         axes[-1].axis('off')
         plt.tight_layout()
         st.pyplot(fig)
+        plt.close()
         
     with tab2:
         st.write("### Deteksi Outlier Berdasarkan Boxplot")
@@ -134,6 +138,7 @@ elif menu == "Visualisasi Distribusi & Outlier":
         axes[-1].axis('off')
         plt.tight_layout()
         st.pyplot(fig)
+        plt.close()
         
     with tab3:
         st.write("### Rata-rata Produksi Padi per Provinsi di Sumatera (1993-2020)")
@@ -144,6 +149,7 @@ elif menu == "Visualisasi Distribusi & Outlier":
         ax.set_xlabel('Rata-rata Produksi (Ton)')
         plt.tight_layout()
         st.pyplot(fig)
+        plt.close()
         
         st.write("**Urutan Rata-rata Produksi (Tertinggi ke Terendah):**")
         st.dataframe(rata_provinsi.sort_values(ascending=False).round(0), use_container_width=True)
@@ -190,11 +196,12 @@ elif menu == "Analisis Hubungan & Hipotesis":
     col_plot1, col_plot2 = st.columns([1, 1.2])
     
     with col_plot1:
-        st.write("**Heatmap Korelasi (Pearson basis numerik):**")
+        st.write("**Heatmap Korelasi (Pearson basis):**")
         fig_heat, ax_heat = plt.subplots(figsize=(6, 5))
         sns.heatmap(df[kolom_numerik].corr(), annot=True, cmap='YlGnBu', fmt='.2f', ax=ax_heat)
         plt.tight_layout()
         st.pyplot(fig_heat)
+        plt.close()
         
     with col_plot2:
         st.write("**Scatter Plot Hubungan Variabel vs Produksi:**")
@@ -210,6 +217,7 @@ elif menu == "Analisis Hubungan & Hipotesis":
             axes_scat[i].set_title(f'{labels_h[i]}: {col} vs Produksi\nrho = {rho:.3f} | {sig_label}', fontsize=9)
         plt.tight_layout()
         st.pyplot(fig_scat)
+        plt.close()
 
     # 3. Ringkasan Hipotesis
     st.subheader("3. Ringkasan Hasil Uji Hipotesis Formal")
