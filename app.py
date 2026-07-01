@@ -77,9 +77,9 @@ if menu == "Ikhtisar Data":
     with col1:
         st.metric("Jumlah Baris Data", len(df))
     with col2:
-        st.metric("Jumlah Provinsi", df['Provinsi'].nunique())
+        st.metric("Jumlah province", df['province'].nunique())
         
-    st.write("**Daftar Provinsi:**", ", ".join(sorted(df['Provinsi'].unique())))
+    st.write("**Daftar province:**", ", ".join(sorted(df['province'].unique())))
     
     st.write("### Cuplikan Data")
     st.dataframe(df.head(10), use_container_width=True)
@@ -111,7 +111,7 @@ elif menu == "Statistika Deskriptif":
 elif menu == "Visualisasi Distribusi & Outlier":
     st.title("📈 Visualisasi Distribusi & Deteksi Outlier")
     
-    tab1, tab2, tab3 = st.tabs(["Distribusi Variabel", "Deteksi Outlier (Boxplot)", "Produksi Per Provinsi"])
+    tab1, tab2, tab3 = st.tabs(["Distribusi Variabel", "Deteksi Outlier (Boxplot)", "Produksi Per province"])
     
     with tab1:
         st.write("### Distribusi Variabel Numerik")
@@ -141,18 +141,18 @@ elif menu == "Visualisasi Distribusi & Outlier":
         plt.close()
         
     with tab3:
-        st.write("### Rata-rata Produksi Padi per Provinsi di Sumatera (1993-2020)")
-        rata_provinsi = df.groupby('Provinsi')['Produksi'].mean().sort_values()
+        st.write("### Rata-rata Produksi Padi per province di Sumatera (1993-2020)")
+        rata_province = df.groupby('province')['Produksi'].mean().sort_values()
         
         fig, ax = plt.subplots(figsize=(10, 6))
-        rata_provinsi.plot(kind='barh', color='seagreen', ax=ax)
+        rata_province.plot(kind='barh', color='seagreen', ax=ax)
         ax.set_xlabel('Rata-rata Produksi (Ton)')
         plt.tight_layout()
         st.pyplot(fig)
         plt.close()
         
         st.write("**Urutan Rata-rata Produksi (Tertinggi ke Terendah):**")
-        st.dataframe(rata_provinsi.sort_values(ascending=False).round(0), use_container_width=True)
+        st.dataframe(rata_province.sort_values(ascending=False).round(0), use_container_width=True)
 
 # ============================================
 # HALAMAN 4: ANALISIS HUBUNGAN & HIPOTESIS
